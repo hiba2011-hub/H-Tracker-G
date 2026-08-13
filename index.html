@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Habit Tracker | Personal Productivity</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="background-glow glow-1"></div>
+    <div class="background-glow glow-2"></div>
+
+    <div class="app-container">
+      <!-- Header Section -->
+      <header class="app-header">
+        <div class="brand">
+          <div class="logo-icon">⚡</div>
+          <div>
+            <h1>Habit Tracker</h1>
+            <div class="month-selector">
+              <button class="icon-btn" id="prev-month">‹</button>
+              <span id="current-month-display">August 2026</span>
+              <button class="icon-btn" id="next-month">›</button>
+            </div>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button
+            id="theme-toggle"
+            class="theme-toggle-btn"
+            title="Toggle Theme"
+          >
+            <span id="theme-icon">☀️</span>
+          </button>
+          <div class="streak-badge">
+            <span class="fire-icon">🔥</span>
+            <span id="best-streak-count">0</span> Day Streak
+          </div>
+        </div>
+      </header>
+
+      <!-- KPI Summary Grid -->
+      <section class="kpi-grid">
+        <div class="glass-card kpi-card">
+          <span class="kpi-value" id="kpi-habits-count">0</span>
+          <span class="kpi-label">Habits</span>
+        </div>
+        <div class="glass-card kpi-card">
+          <div class="kpi-val-row">
+            <span class="kpi-icon">🔥</span>
+            <span class="kpi-value" id="kpi-streak">0</span>
+          </div>
+          <span class="kpi-label">Current Streak</span>
+        </div>
+        <div class="glass-card kpi-card">
+          <div class="kpi-val-row">
+            <span class="kpi-icon">🧊</span>
+            <span class="kpi-value" id="kpi-freezes">0</span>
+          </div>
+          <span class="kpi-label">Streak Freezes</span>
+        </div>
+        <div class="glass-card kpi-card">
+          <span class="kpi-value" id="kpi-year-rate">0%</span>
+          <span class="kpi-label">Year Completion</span>
+        </div>
+        <div class="glass-card kpi-card kpi-progress-card">
+          <div class="mini-progress-ring">
+            <svg width="52" height="52">
+              <circle class="ring-bg" cx="26" cy="26" r="20" />
+              <circle
+                class="ring-fill"
+                id="monthly-ring-fill"
+                cx="26"
+                cy="26"
+                r="20"
+              />
+            </svg>
+            <span class="ring-text" id="kpi-month-rate">0%</span>
+          </div>
+          <span class="kpi-label">Monthly Progress</span>
+        </div>
+      </section>
+
+      <!-- Dynamic 7-Day History Strip -->
+      <section class="glass-card history-card">
+        <div class="history-header">
+          <h3>7-Day Active History</h3>
+          <span class="history-subtitle" id="history-range-text"
+            >Current Week</span
+          >
+        </div>
+        <div class="calendar-strip" id="calendar-strip"></div>
+      </section>
+
+      <!-- Habit Matrix Spreadsheet & Year View -->
+      <section class="glass-card matrix-card">
+        <div class="matrix-header-controls">
+          <div class="view-toggles">
+            <button class="filter-btn active" id="view-month-btn">Month</button>
+            <button class="filter-btn" id="view-year-btn">Year Tracker</button>
+          </div>
+
+          <!-- Interactive Reminder Settings -->
+          <div class="reminder-bar">
+            <span class="reminder-icon">🔔</span>
+            <label for="reminder-time">Daily Alarm:</label>
+            <input type="time" id="reminder-time" value="19:00" />
+            <button id="toggle-reminder-btn" class="pill-toggle">Enable</button>
+          </div>
+        </div>
+
+        <div class="matrix-scroll-wrapper">
+          <table class="habit-matrix-table" id="habit-matrix-table"></table>
+        </div>
+
+        <form id="add-habit-form" class="matrix-add-form">
+          <input
+            type="text"
+            id="new-habit-input"
+            placeholder="New habit (e.g., drink water)..."
+            required
+          />
+          <button
+            type="submit"
+            class="btn-primary"
+            style="width: auto; padding: 0.65rem 1.25rem"
+          >
+            + Add Habit
+          </button>
+        </form>
+      </section>
+
+      <!-- Dynamic Weekly Performance Summary Card -->
+      <section class="glass-card summary-card">
+        <div class="summary-ring">
+          <svg width="70" height="70">
+            <circle class="ring-bg" cx="35" cy="35" r="28" />
+            <circle
+              class="ring-fill"
+              id="weekly-ring-fill"
+              cx="35"
+              cy="35"
+              r="28"
+            />
+          </svg>
+          <span class="ring-text" id="weekly-percentage">0%</span>
+        </div>
+        <div class="summary-info">
+          <h3>This Week Overview</h3>
+          <p>
+            You completed <strong id="weekly-checks-count">0</strong> check-ins
+            this week.
+          </p>
+          <p>Top Performing Habit: <strong id="top-habit-name">None</strong></p>
+        </div>
+      </section>
+
+      <!-- Analytics Charts Grid -->
+      <section class="analytics-grid">
+        <div class="glass-card chart-card">
+          <h3>Daily Progress Trend</h3>
+          <div class="chart-container">
+            <svg
+              id="daily-progress-chart"
+              viewBox="0 0 500 120"
+              preserveAspectRatio="none"
+            ></svg>
+          </div>
+        </div>
+
+        <div class="glass-card chart-card">
+          <h3>Weekly Completion Breakdown</h3>
+          <div class="weekly-bars-container" id="weekly-bars-container"></div>
+        </div>
+      </section>
+
+      <!-- Monthly Heatmap -->
+      <section class="glass-card heatmap-card">
+        <h3>Monthly Heatmap</h3>
+        <div class="heatmap-grid" id="heatmap-grid"></div>
+      </section>
+
+      <!-- Dynamic Achievements Section -->
+      <section class="glass-card achievements-card">
+        <div class="card-title-row">
+          <h3>Achievements</h3>
+          <span class="badges-count" id="unlocked-badges-count">0 / 12</span>
+        </div>
+        <div class="badges-grid" id="badges-grid"></div>
+      </section>
+
+      <!-- Daily Reflections Matrix -->
+      <section class="glass-card reflections-card">
+        <h3>Daily Reflections</h3>
+        <p class="section-subtitle">
+          Log mood, energy, and motivation across the month.
+        </p>
+        <div class="matrix-scroll-wrapper">
+          <table
+            class="reflection-matrix-table"
+            id="reflection-matrix-table"
+          ></table>
+        </div>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
